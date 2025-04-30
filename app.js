@@ -1,13 +1,18 @@
+
+require('dotenv').config();
+
 const express = require('express'); // import express framework
 const session = require("express-session"); 
 const cors = require("cors"); // This because we are connecting React (Frontend) and Express (Backend) from diff ports.
-const path = require('path'); // import the path in-built module
+const connectDB = require('./config/db');
 const CartRoutes = require('./routes/cartRoutes'); // this imports the routes
-
-// const ejs = require ('ejs'); // import the ejs module
+const ProductRoutes = require('./routes/productRoutes');
 
 //variable for express function
 const app = express();
+
+// Connect to MongoDB
+connectDB()
 
 // Express's built-in middleware
 
@@ -26,14 +31,16 @@ app.use(session({ // This helps t manage the sessiosn like carts,users, login et
     saveUninitialized: true,
 }))
 
-app.use('/api', CartRoutes); // This shows all car routes will have to get the prefix with /api
+app.use('/api', CartRoutes); // This shows all cart routes will have to get the prefix with /api
+app.use('/api', ProductRoutes); // This shows all product routes 
 
 
+
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`Craftly is running on port ${PORT}`);
 });
-
 
 
 
